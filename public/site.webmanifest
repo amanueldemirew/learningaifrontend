@@ -1,0 +1,14 @@
+{
+  "name": "Learning AI Platform",
+  "short_name": "Learning AI",
+  "icons": [
+    {
+      "src": "/assets/logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

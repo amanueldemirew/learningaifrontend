@@ -1,8 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Learning AI Frontend
+
+A Next.js frontend for the Learning AI platform, providing interactive AI courses and learning experiences.
+
+## Features
+
+- Modern UI with responsive design
+- Dark/light mode support
+- Authentication system
+- Course creation and management
+- Interactive learning content
+- Markdown support with syntax highlighting
+- SEO optimized
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18.x or later
+- npm, yarn, or pnpm
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+3. Create a `.env.local` file in the root directory with the following variables:
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME=Learning AI
+NEXT_PUBLIC_APP_DESCRIPTION=Learn AI with interactive courses
+NEXT_PUBLIC_APP_VERSION=1.0.0
+NEXT_PUBLIC_APP_ENV=development
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
@@ -10,27 +51,85 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Building for Production
 
-## Learn More
+```bash
+npm run build
+# or
+yarn build
+# or
+pnpm build
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Running in Production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+# or
+yarn start
+# or
+pnpm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Docker Deployment
 
-## Deploy on Vercel
+1. Build the Docker image:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+docker build -t learning-ai-frontend .
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. Run the Docker container:
+
+```bash
+docker run -p 3000:3000 learning-ai-frontend
+```
+
+### Environment Variables for Production
+
+For production, update the `.env.local` file with production values:
+
+```
+NEXT_PUBLIC_API_URL=https://api.learning-ai.example.com/api/v1
+NEXT_PUBLIC_APP_URL=https://learning-ai.example.com
+NEXT_PUBLIC_APP_NAME=Learning AI
+NEXT_PUBLIC_APP_DESCRIPTION=Learn AI with interactive courses
+NEXT_PUBLIC_APP_VERSION=1.0.0
+NEXT_PUBLIC_APP_ENV=production
+```
+
+## Project Structure
+
+- `src/app`: Next.js app router pages
+- `src/components`: Reusable UI components
+- `src/hooks`: Custom React hooks
+- `src/lib`: Utility functions and context providers
+- `src/services`: API services
+- `src/types`: TypeScript type definitions
+- `src/utils`: Helper functions
+
+## Performance Optimization
+
+- Image optimization with Next.js Image component
+- Code splitting and lazy loading
+- Server-side rendering where appropriate
+- Static site generation for public pages
+- API route caching
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
