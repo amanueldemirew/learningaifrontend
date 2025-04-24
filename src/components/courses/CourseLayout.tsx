@@ -7,7 +7,6 @@ import { CourseHeader } from "@/components/courses/CourseHeader";
 import { CourseContent } from "@/components/courses/CourseContent";
 import { useCourse } from "@/hooks/useCourse";
 import { Button } from "@/components/ui/button";
-import { FileText, Trash2, Globe, Lock } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -39,7 +38,6 @@ export function CourseLayout() {
     updateCourse,
     deleteCourse,
     generateTOC,
-    clearTOC,
     publishCourse,
     unpublishCourse,
   } = useCourse(courseId || 0);
@@ -134,22 +132,6 @@ export function CourseLayout() {
       console.error("Error generating TOC:", error);
     }
   }, [course, generateTOC]);
-
-  const handleClearTOC = useCallback(async () => {
-    if (!course) return;
-
-    if (
-      window.confirm(
-        "Are you sure you want to clear the table of contents? This action cannot be undone."
-      )
-    ) {
-      try {
-        await clearTOC();
-      } catch (error) {
-        console.error("Error clearing TOC:", error);
-      }
-    }
-  }, [course, clearTOC]);
 
   // Add keyboard shortcut to toggle sidebar (Ctrl+B or Cmd+B)
   useEffect(() => {

@@ -119,10 +119,7 @@ export function BatchContentGenerator({
       // Log the options being sent to help with debugging
       console.log("Sending content generation request with options:", options);
 
-      const response = await batchGenerateModuleContent(
-        selectedModuleId,
-        options
-      );
+      await batchGenerateModuleContent(selectedModuleId, options);
 
       // Truncate long module titles for the toast message
       const moduleTitle = selectedModuleTitle || `Module ${selectedModuleId}`;

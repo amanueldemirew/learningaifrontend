@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { listModules } from "@/services/modules";
-import { PaginatedResponse, Module, Unit } from "@/services/types";
+import { Module, Unit } from "@/services/types";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest) {
   try {
+    // Use the params.id directly to extract courseId
     // Extract courseId from the URL path
     const url = new URL(request.url);
     const pathParts = url.pathname.split("/");

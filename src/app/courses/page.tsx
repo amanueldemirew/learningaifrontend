@@ -21,25 +21,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  listCourses,
-  createCourse,
-  deleteCourse,
-  clearCourseTOC,
-} from "@/services/courses";
+import { listCourses, createCourse } from "@/services/courses";
 import { Course } from "@/services/types";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
-import {
-  BookOpen,
-  Plus,
-  Search,
-  FileText,
-  ChevronRight,
-  Loader2,
-} from "lucide-react";
+import { BookOpen, Plus, Search, ChevronRight, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 
@@ -156,28 +143,6 @@ export default function CoursesPage() {
       toast.error("Failed to create course");
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleDeleteCourse = async (courseId: number) => {
-    try {
-      await deleteCourse(courseId);
-      toast.success("Course deleted successfully");
-      fetchCourses();
-    } catch (error) {
-      console.error("Error deleting course:", error);
-      toast.error("Failed to delete course");
-    }
-  };
-
-  const handleClearTOC = async (courseId: number) => {
-    try {
-      await clearCourseTOC(courseId);
-      toast.success("Course content cleared successfully");
-      fetchCourses();
-    } catch (error) {
-      console.error("Error clearing course content:", error);
-      toast.error("Failed to clear course content");
     }
   };
 
@@ -302,7 +267,7 @@ export default function CoursesPage() {
                     className="w-full h-9 text-sm"
                     onClick={() => handleViewCourse(course.id)}
                   >
-                    <FileText className="mr-2 h-4 w-4" />
+                    <BookOpen className="mr-2 h-4 w-4" />
                     View Course
                     <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
