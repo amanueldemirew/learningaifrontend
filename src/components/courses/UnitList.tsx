@@ -73,6 +73,7 @@ export function UnitList({
     description: "",
     order: 0,
   });
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const router = useRouter();
 
   const fetchUnits = useCallback(async () => {
@@ -126,7 +127,7 @@ export function UnitList({
       await createUnit(moduleId, unitData);
 
       toast.success("Unit created successfully");
-      setIsEditDialogOpen(false);
+      setIsCreateDialogOpen(false);
       setFormData({ title: "", description: "", order: 0 });
       fetchUnits();
     } catch (error) {
@@ -296,7 +297,7 @@ export function UnitList({
       )}
 
       {/* Create Unit Button */}
-      <Dialog>
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" size="sm" className="w-full mt-2">
             <Plus className="h-4 w-4 mr-2" />
