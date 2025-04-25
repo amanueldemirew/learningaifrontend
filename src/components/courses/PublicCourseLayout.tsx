@@ -23,6 +23,7 @@ import {
 import { CustomSidebar } from "@/components/courses/CustomSidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function PublicCourseLayout() {
   const params = useParams();
@@ -86,8 +87,10 @@ export function PublicCourseLayout() {
     try {
       setIsLoadingModules(true);
       setCourseError(null);
-      // First fetch all modules
-      const modulesData = await fetchPublicModules(courseId);
+      console.log("Fetching modules for course:", courseId);
+      // First fetch all modules - explicitly request page 1
+      const modulesData = await fetchPublicModules(1); // Start with page 1
+      console.log("Modules data received:", modulesData);
       const modulesList = modulesData.items || [];
       setModules(modulesList);
 
@@ -100,6 +103,7 @@ export function PublicCourseLayout() {
         // Fetch units for the first module
         await fetchUnitsForModule(firstModule.id);
       } else {
+        console.log("No modules found for course:", courseId);
         setCourseError("This course has no modules yet.");
       }
     } catch (error) {
@@ -112,8 +116,9 @@ export function PublicCourseLayout() {
   }, [courseId, fetchPublicModules, isInitialLoad, fetchUnitsForModule]);
 
   useEffect(() => {
+    console.log("Course data:", course);
     fetchModulesWithUnits();
-  }, [fetchModulesWithUnits]);
+  }, [fetchModulesWithUnits, course]);
 
   const handleModuleSelect = useCallback(
     async (moduleId: number, moduleTitle: string) => {
@@ -176,6 +181,142 @@ export function PublicCourseLayout() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [toggleSidebar]);
+
+  const handleNextUnit = useCallback(() => {
+    if (!selectedModuleId || !selectedUnitId) return;
+
+    // Find the current module
+    const currentModule = modules.find((m) => m.id === selectedModuleId);
+    if (!currentModule) return;
+
+    // Get all units for the current module
+    const moduleUnits = units[selectedModuleId] || [];
+    if (moduleUnits.length === 0) return;
+
+    // Find the current unit's index
+    const currentUnitIndex = moduleUnits.findIndex(
+      (u) => u.id === selectedUnitId
+    );
+    if (currentUnitIndex === -1) return;
+
+    // If there's a next unit in the current module
+    if (currentUnitIndex < moduleUnits.length - 1) {
+      const nextUnit = moduleUnits[currentUnitIndex + 1];
+      handleUnitSelect(nextUnit.id, nextUnit.title);
+      return;
+    }
+
+    // If we're at the last unit of the current module, try to go to the first unit of the next module
+    const currentModuleIndex = modules.findIndex(
+      (m) => m.id === selectedModuleId
+    );
+    if (currentModuleIndex < modules.length - 1) {
+      const nextModule = modules[currentModuleIndex + 1];
+
+      // First select the next module
+      handleModuleSelect(nextModule.id, nextModule.title);
+
+      // Then fetch and select its first unit
+      const fetchAndSelectFirstUnit = async () => {
+        try {
+          const unitsData = await fetchPublicUnits(nextModule.id);
+          const nextModuleUnits = unitsData.items || [];
+          if (nextModuleUnits.length > 0) {
+            const firstUnit = nextModuleUnits[0];
+            handleUnitSelect(firstUnit.id, firstUnit.title);
+          }
+        } catch (error) {
+          console.error("Error fetching units for next module:", error);
+        }
+      };
+
+      fetchAndSelectFirstUnit();
+    }
+  }, [
+    modules,
+    units,
+    selectedModuleId,
+    selectedUnitId,
+    handleModuleSelect,
+    handleUnitSelect,
+    fetchPublicUnits,
+  ]);
+
+  const handlePreviousUnit = useCallback(() => {
+    if (!selectedModuleId || !selectedUnitId) return;
+
+    // Find the current module
+    const currentModule = modules.find((m) => m.id === selectedModuleId);
+    if (!currentModule) return;
+
+    // Get all units for the current module
+    const moduleUnits = units[selectedModuleId] || [];
+    if (moduleUnits.length === 0) return;
+
+    // Find the current unit's index
+    const currentUnitIndex = moduleUnits.findIndex(
+      (u) => u.id === selectedUnitId
+    );
+    if (currentUnitIndex === -1) return;
+
+    // If there's a previous unit in the current module
+    if (currentUnitIndex > 0) {
+      const prevUnit = moduleUnits[currentUnitIndex - 1];
+      handleUnitSelect(prevUnit.id, prevUnit.title);
+      return;
+    }
+
+    // If we're at the first unit of the current module, try to go to the last unit of the previous module
+    const currentModuleIndex = modules.findIndex(
+      (m) => m.id === selectedModuleId
+    );
+    if (currentModuleIndex > 0) {
+      const prevModule = modules[currentModuleIndex - 1];
+
+      // First select the previous module
+      handleModuleSelect(prevModule.id, prevModule.title);
+
+      // Then fetch and select its last unit
+      const fetchAndSelectLastUnit = async () => {
+        try {
+          const unitsData = await fetchPublicUnits(prevModule.id);
+          const prevModuleUnits = unitsData.items || [];
+          if (prevModuleUnits.length > 0) {
+            const lastUnit = prevModuleUnits[prevModuleUnits.length - 1];
+            handleUnitSelect(lastUnit.id, lastUnit.title);
+          }
+        } catch (error) {
+          console.error("Error fetching units for previous module:", error);
+        }
+      };
+
+      fetchAndSelectLastUnit();
+    }
+  }, [
+    modules,
+    units,
+    selectedModuleId,
+    selectedUnitId,
+    handleModuleSelect,
+    handleUnitSelect,
+    fetchPublicUnits,
+  ]);
+
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        handleNextUnit();
+      } else if (e.key === "ArrowLeft") {
+        handlePreviousUnit();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleNextUnit, handlePreviousUnit]);
 
   // Validate that courseId is a valid number
   if (!courseIdParam || isNaN(Number(courseIdParam))) {
@@ -336,16 +477,37 @@ export function PublicCourseLayout() {
         {/* Main Content */}
         <div className="flex-1 overflow-auto p-6">
           {selectedModuleId && selectedUnitId ? (
-            <CourseContent
-              course={course}
-              selectedModuleId={selectedModuleId}
-              selectedUnitId={selectedUnitId}
-              onModuleSelect={handleModuleSelect}
-              onUnitSelect={handleUnitSelect}
-              sidebarView={false}
-              onRefreshContent={fetchModulesWithUnits}
-              isPublic={true}
-            />
+            <div className="flex flex-col h-full">
+              <CourseContent
+                course={course}
+                selectedModuleId={selectedModuleId}
+                selectedUnitId={selectedUnitId}
+                onModuleSelect={handleModuleSelect}
+                onUnitSelect={handleUnitSelect}
+                sidebarView={false}
+                onRefreshContent={fetchModulesWithUnits}
+                isPublic={true}
+              />
+              {/* Navigation Buttons */}
+              <div className="flex justify-between items-center mt-6 pt-4 border-t">
+                <Button
+                  variant="outline"
+                  onClick={handlePreviousUnit}
+                  className="flex items-center gap-2"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleNextUnit}
+                  className="flex items-center gap-2"
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <h2 className="text-3xl font-semibold mb-4">

@@ -224,7 +224,7 @@ export const createModule = async (
   courseId: number,
   data: ModuleCreate
 ): Promise<Module> => {
-  return apiFetch(`courses/modules?course_id=${courseId}`, {
+  return apiFetch(`courses/public/modules?course_id=${courseId}`, {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
@@ -240,7 +240,7 @@ export const updateModule = async (
   moduleId: number,
   data: ModuleUpdate
 ): Promise<Module> => {
-  return apiFetch(`courses/modules/${moduleId}`, {
+  return apiFetch(`courses/public/modules/${moduleId}`, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
@@ -253,7 +253,7 @@ export const updateModule = async (
  * Delete a module
  */
 export const deleteModule = async (moduleId: number): Promise<void> => {
-  return apiFetch(`courses/modules/${moduleId}`, {
+  return apiFetch(`courses/public/modules/${moduleId}`, {
     method: "DELETE",
   });
 };
@@ -269,7 +269,7 @@ export const listModules = async (
   sortOrder = "asc",
   search?: string
 ): Promise<PaginatedResponse<Module>> => {
-  let url = `courses/modules?course_id=${courseId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
+  let url = `courses/public/modules?course_id=${courseId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
   if (search) {
     url += `&search=${encodeURIComponent(search)}`;
   }
@@ -280,7 +280,7 @@ export const listModules = async (
  * Create a new unit
  */
 export const createUnit = async (data: UnitCreate): Promise<Unit> => {
-  return apiFetch("courses/units", {
+  return apiFetch("courses/public/units", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
@@ -309,7 +309,7 @@ export const updateUnit = async (
  * Delete a unit
  */
 export const deleteUnit = async (unitId: number): Promise<void> => {
-  return apiFetch(`courses/units/${unitId}`, {
+  return apiFetch(`courses/public/units/${unitId}`, {
     method: "DELETE",
   });
 };
@@ -334,7 +334,7 @@ export const listUnits = async (
  * Create a new content
  */
 export const createContent = async (data: ContentCreate): Promise<Content> => {
-  return apiFetch("courses/contents", {
+  return apiFetch("contents", {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
@@ -350,7 +350,7 @@ export const updateContent = async (
   contentId: number,
   data: ContentUpdate
 ): Promise<Content> => {
-  return apiFetch(`courses/contents/${contentId}`, {
+  return apiFetch(`contents/${contentId}`, {
     method: "PUT",
     body: JSON.stringify(data),
     headers: {
@@ -363,7 +363,7 @@ export const updateContent = async (
  * Delete a content
  */
 export const deleteContent = async (contentId: number): Promise<void> => {
-  return apiFetch(`courses/contents/${contentId}`, {
+  return apiFetch(`contents/${contentId}`, {
     method: "DELETE",
   });
 };
@@ -372,7 +372,7 @@ export const deleteContent = async (contentId: number): Promise<void> => {
  * Get a content by ID
  */
 export const getContent = async (contentId: number): Promise<Content> => {
-  return apiFetch(`courses/contents/${contentId}`);
+  return apiFetch(`courses/public/contents/${contentId}`);
 };
 
 /**
@@ -386,7 +386,7 @@ export const listContents = async (
   sortOrder = "asc"
 ): Promise<PaginatedResponse<Content>> => {
   return apiFetch(
-    `courses/contents/unit?unit_id=${unitId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
+    `courses/public/contents/unit?unit_id=${unitId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
   );
 };
 
@@ -401,7 +401,7 @@ export const listModuleContents = async (
   sortOrder = "asc"
 ): Promise<PaginatedResponse<Content>> => {
   return apiFetch(
-    `courses/contents/module?module_id=${moduleId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
+    `courses/public/contents/module?module_id=${moduleId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
   );
 };
 
@@ -412,7 +412,7 @@ export const generateContent = async (
   unitId: number,
   options?: ContentGenerationOptions
 ): Promise<Content> => {
-  return apiFetch(`courses/contents/generate?unit_id=${unitId}`, {
+  return apiFetch(`contents/generate?unit_id=${unitId}`, {
     method: "POST",
     body: options ? JSON.stringify(options) : undefined,
     headers: options ? { "Content-Type": "application/json" } : undefined,
@@ -426,7 +426,7 @@ export const regenerateContent = async (
   contentId: number,
   options: ContentGenerationOptions
 ): Promise<Content> => {
-  return apiFetch(`courses/contents/${contentId}/regenerate`, {
+  return apiFetch(`contents/${contentId}/regenerate`, {
     method: "POST",
     body: JSON.stringify(options),
     headers: {
