@@ -84,7 +84,7 @@ export const listCourses = async (
   size = 10
 ): Promise<Course[] | PaginatedResponse<Course>> => {
   const response = await apiFetch<Course[] | PaginatedResponse<Course>>(
-    `courses?skip=${(page - 1) * size}&limit=${size}`
+    `courses/?skip=${(page - 1) * size}&limit=${size}`
   );
 
   // Handle both array responses and paginated responses
