@@ -412,7 +412,7 @@ export const generateContent = async (
   unitId: number,
   options?: ContentGenerationOptions
 ): Promise<Content> => {
-  return apiFetch(`contents/generate/?unit_id=${unitId}`, {
+  return apiFetch(`contents/generate?unit_id=${unitId}`, {
     method: "POST",
     body: options ? JSON.stringify(options) : undefined,
     headers: options ? { "Content-Type": "application/json" } : undefined,
