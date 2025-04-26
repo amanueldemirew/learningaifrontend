@@ -80,7 +80,7 @@ export const generateContent = async (
   unitId: number,
   options: ContentGenerationOptions
 ): Promise<Content> => {
-  return apiFetch(`contents/generate?unit_id=${unitId}`, {
+  return apiFetch(`contents/generate/?unit_id=${unitId}`, {
     method: "POST",
     body: JSON.stringify(options),
   });
@@ -115,7 +115,7 @@ export const batchGenerateModuleContent = async (
   moduleId: number,
   options: ContentGenerationOptions
 ): Promise<{ message: string }> => {
-  return apiFetch(`contents/batch-generate?module_id=${moduleId}`, {
+  return apiFetch(`contents/batch-generate/?module_id=${moduleId}`, {
     method: "POST",
     body: JSON.stringify(options),
   });
