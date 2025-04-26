@@ -31,7 +31,7 @@ export const listUnits = async (
   size = 10
 ): Promise<Unit[] | PaginatedResponse<Unit>> => {
   return apiFetch(
-    `units?course_id=${courseId}&module_id=${moduleId}&page=${page}&per_page=${size}`
+    `units/?course_id=${courseId}&module_id=${moduleId}&page=${page}&per_page=${size}`
   );
 };
 
