@@ -131,7 +131,7 @@ export const deleteCourse = async (courseId: number): Promise<void> => {
  * Generate table of contents for a course
  */
 export const generateCourseTOC = async (courseId: number): Promise<unknown> => {
-  return apiFetch(`generate-toc?course_id=${courseId}`, {
+  return apiFetch(`generate-toc/?course_id=${courseId}`, {
     method: "POST",
   });
 };
@@ -140,7 +140,7 @@ export const generateCourseTOC = async (courseId: number): Promise<unknown> => {
  * Clear table of contents for a course
  */
 export const clearCourseTOC = async (courseId: number): Promise<void> => {
-  await apiFetch(`clear-toc?course_id=${courseId}`, {
+  await apiFetch(`clear-toc/?course_id=${courseId}`, {
     method: "DELETE",
     headers: {
       accept: "*/*",
@@ -152,7 +152,7 @@ export const clearCourseTOC = async (courseId: number): Promise<void> => {
  * Publish a course
  */
 export const publishCourse = async (courseId: number): Promise<Course> => {
-  return apiFetch(`publish?course_id=${courseId}`, {
+  return apiFetch(`publish/?course_id=${courseId}`, {
     method: "PUT",
     headers: {
       accept: "application/json",
@@ -164,7 +164,7 @@ export const publishCourse = async (courseId: number): Promise<Course> => {
  * Unpublish a course
  */
 export const unpublishCourse = async (courseId: number): Promise<Course> => {
-  return apiFetch(`unpublish?course_id=${courseId}`, {
+  return apiFetch(`unpublish/?course_id=${courseId}`, {
     method: "PUT",
     headers: {
       accept: "application/json",
@@ -179,7 +179,7 @@ export const getPublishedCourses = async (
   page = 1,
   perPage = 10
 ): Promise<Course[]> => {
-  return apiFetch(`courses/public/courses?page=${page}&per_page=${perPage}`);
+  return apiFetch(`courses/public/courses/?page=${page}&per_page=${perPage}`);
 };
 
 /**
@@ -224,7 +224,7 @@ export const createModule = async (
   courseId: number,
   data: ModuleCreate
 ): Promise<Module> => {
-  return apiFetch(`courses/public/modules?course_id=${courseId}`, {
+  return apiFetch(`courses/public/modules/?course_id=${courseId}`, {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
@@ -269,7 +269,7 @@ export const listModules = async (
   sortOrder = "asc",
   search?: string
 ): Promise<PaginatedResponse<Module>> => {
-  let url = `courses/public/modules?course_id=${courseId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
+  let url = `courses/public/modules/?course_id=${courseId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
   if (search) {
     url += `&search=${encodeURIComponent(search)}`;
   }
@@ -326,7 +326,7 @@ export const listUnits = async (
   sortOrder = "asc"
 ): Promise<PaginatedResponse<Unit>> => {
   return apiFetch(
-    `courses/units?course_id=${courseId}&module_id=${moduleId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
+    `courses/units/?course_id=${courseId}&module_id=${moduleId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
   );
 };
 
@@ -386,7 +386,7 @@ export const listContents = async (
   sortOrder = "asc"
 ): Promise<PaginatedResponse<Content>> => {
   return apiFetch(
-    `courses/public/contents/unit?unit_id=${unitId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
+    `courses/public/contents/unit/?unit_id=${unitId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
   );
 };
 
@@ -401,7 +401,7 @@ export const listModuleContents = async (
   sortOrder = "asc"
 ): Promise<PaginatedResponse<Content>> => {
   return apiFetch(
-    `courses/public/contents/module?module_id=${moduleId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
+    `courses/public/contents/module/?module_id=${moduleId}&page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`
   );
 };
 
@@ -412,7 +412,7 @@ export const generateContent = async (
   unitId: number,
   options?: ContentGenerationOptions
 ): Promise<Content> => {
-  return apiFetch(`contents/generate?unit_id=${unitId}`, {
+  return apiFetch(`contents/generate/?unit_id=${unitId}`, {
     method: "POST",
     body: options ? JSON.stringify(options) : undefined,
     headers: options ? { "Content-Type": "application/json" } : undefined,
@@ -442,7 +442,7 @@ export const batchGenerateContent = async (
   moduleId: number,
   options?: ContentGenerationOptions
 ): Promise<unknown> => {
-  return apiFetch(`batch-generate?module_id=${moduleId}`, {
+  return apiFetch(`batch-generate/?module_id=${moduleId}`, {
     method: "POST",
     body: options ? JSON.stringify(options) : undefined,
   });
@@ -455,7 +455,7 @@ export const batchGenerateAllContent = async (
   courseId: number,
   options?: ContentGenerationOptions
 ): Promise<unknown> => {
-  return apiFetch(`batch-generate-all?course_id=${courseId}`, {
+  return apiFetch(`batch-generate-all/?course_id=${courseId}`, {
     method: "POST",
     body: options ? JSON.stringify(options) : undefined,
   });
@@ -465,7 +465,7 @@ export const batchGenerateAllContent = async (
  * Clear all contents for a module
  */
 export const clearModuleContents = async (moduleId: number): Promise<void> => {
-  await apiFetch(`clear-module-contents?module_id=${moduleId}`, {
+  await apiFetch(`clear-module-contents/?module_id=${moduleId}`, {
     method: "DELETE",
   });
 };
