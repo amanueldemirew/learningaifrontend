@@ -12,7 +12,7 @@ export const createModule = async (
   courseId: number,
   data: ModuleCreate
 ): Promise<Module> => {
-  return apiFetch(`modules?course_id=${courseId}`, {
+  return apiFetch(`modules/?course_id=${courseId}`, {
     method: "POST",
     body: JSON.stringify(data),
   });
